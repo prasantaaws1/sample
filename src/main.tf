@@ -19,3 +19,7 @@ module "vpc-infra" {
 module "ecrrepo" {
   source = "./modules/ecr"
 }
+
+module "ecs-cluster" {
+  source = "./modules/ecs"
+}

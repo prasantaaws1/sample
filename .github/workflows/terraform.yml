@@ -1,0 +1,11 @@
+name: Deploy to Amazon ECS
+on:
+  push:
+    branches:
+      - master
+env:
+  AWS_REGION: us-east-1
+  ECS_CLUSTER: app_cluster
+  CONTAINER_NAME: app
+  ECS_SERVICE: app_service
+  ECS_TD: .github/workflows/td.json

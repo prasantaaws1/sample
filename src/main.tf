@@ -15,3 +15,7 @@ terraform {
 module "vpc-infra" {
   source = "./modules/vpc"
 }
+
+module "ecrrepo" {
+  source = "./modules/ecr"
+}

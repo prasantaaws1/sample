@@ -19,3 +19,29 @@ resource "aws_ecs_service" "service" {
     subnets          = [aws_subnet.sn1-public.id, aws_subnet.sn2-public.id]
   }
 }
+
+resource "aws_ecs_task_definition" "td" {
+  container_definitions = jsonencode([
+    {
+      name         = "app"
+      image        = "424567178047.dkr.ecr.us-east-1.amazonaws.com/app_repo"
+      cpu          = 256
+      memory       = 512
+      essential    = true
+      portMappings = [
+        {
+          containerPort = 80
+          hostPort      = 80
+        }
+      ]
+    }
+  ])
+  family                   = "app"
+  requires_compatibilities = ["FARGATE"]
+
+  cpu                = "256"
+  memory             = "512"
+  network_mode       = "awsvpc"
+  task_role_arn      = "arn:aws:iam::424567178047:role/ecsTaskExecutionRole"
+  execution_role_arn = "arn:aws:iam::424567178047:role/ecsTaskExecutionRole"
+}

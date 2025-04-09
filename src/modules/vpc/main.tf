@@ -110,7 +110,8 @@ resource "aws_route_table_association" "route1" {
 
 resource "aws_route_table_association" "route2" {
   route_table_id = aws_route_table.rt.id
-  subnet_id      = aws_subnet.sn2-public.id
+  //subnet_id      = aws_subnet.sn2-public.id
+  subnet_id      = element(aws_subnet.sn2-private.*.id, count.index)
 }
 
 resource "aws_lb" "ecs_alb" {

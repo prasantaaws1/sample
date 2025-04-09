@@ -21,7 +21,7 @@ resource "aws_subnet" "sn1-public" {
  
 }
 
-resource "aws_subnet" "sn2-public" {
+resource "aws_subnet" "sn2-private" {
   cidr_block              = "10.0.2.0/24"
   vpc_id                  = aws_vpc.vpc.id
   availability_zone       = "us-east-1b"

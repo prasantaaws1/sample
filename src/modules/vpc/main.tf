@@ -95,6 +95,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_route_table" "rt" {
+  count  = var.az_count
   vpc_id = aws_vpc.vpc.id
 
   route {
@@ -109,12 +110,14 @@ resource "aws_route_table" "rt" {
 }
 
 resource "aws_route_table_association" "route1" {
+  count  = var.az_count
   route_table_id = aws_route_table.rt.id
   //subnet_id      = aws_subnet.sn1-public.id
   subnet_id      = element(aws_subnet.sn1-public.*.id, count.index)
 }
 
 resource "aws_route_table_association" "route2" {
+  count  = var.az_count
   route_table_id = aws_route_table.rt.id
   //subnet_id      = aws_subnet.sn2-public.id
   subnet_id      = element(aws_subnet.sn2-private.*.id, count.index)

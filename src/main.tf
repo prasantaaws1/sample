@@ -22,4 +22,6 @@ module "ecrrepo" {
 
 module "ecs-cluster" {
   source = "./modules/ecs"
+  subnets = module.vpc-infra.public_subnet_ids
+  sg_ecs_tasks = [module.vpc-infra.ecs_tasks_security_group_id]
 }

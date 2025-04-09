@@ -109,51 +109,10 @@ resource "aws_route_table" "rt" {
   }
 }
 
-resource "aws_route_table_association" "route1" {
+resource "aws_route_table_association" "route" {
   count  = var.az_count
-  route_table_id = aws_route_table.rt.id
-  //subnet_id      = aws_subnet.sn1-public.id
-  subnet_id      = element(aws_subnet.sn1-public.*.id, count.index)
-}
-
-resource "aws_route_table_association" "route2" {
-  count  = var.az_count
-  route_table_id = aws_route_table.rt.id
+  route_table_id = element(aws_route_table.rt.*.id, count.index)
   //subnet_id      = aws_subnet.sn2-public.id
   subnet_id      = element(aws_subnet.sn2-private.*.id, count.index)
 }
 
-resource "aws_lb" "ecs_alb" {
- name               = "ecs-alb"
- internal           = false
- load_balancer_type = "application"
- security_groups    = [aws_security_group.sg.id]
- subnets            = [aws_subnet.sn1-public.id, aws_subnet.sn2-public.id]
-
- tags = {
-   Name = "ecs-alb"
- }
-}
-
-resource "aws_lb_listener" "ecs_alb_listener" {
- load_balancer_arn = aws_lb.ecs_alb.arn
- port              = 80
- protocol          = "HTTP"
-
- default_action {
-   type             = "forward"
-   target_group_arn = aws_lb_target_group.ecs_tg.arn
- }
-}
-
-resource "aws_lb_target_group" "ecs_tg" {
- name        = "ecs-target-group"
- port        = 80
- protocol    = "HTTP"
- target_type = "ip"
- vpc_id      = aws_vpc.vpc.id
-
- health_check {
-   path = "/"
- }
-}

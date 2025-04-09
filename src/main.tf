@@ -14,7 +14,7 @@ terraform {
 
 module "vpc-infra" {
   source = "./modules/vpc"
-  az_count = "2"
+  az_count = "1"
 }
 
 module "ecrrepo" {

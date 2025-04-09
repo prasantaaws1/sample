@@ -2,7 +2,7 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_vpc" "vpc" {
-  cidr_block           = "172.17.0.0/16"
+  cidr_block           = "10.0.0.0/16"
   instance_tenancy     = "default"
   enable_dns_hostnames = true
 
@@ -14,7 +14,7 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_subnet" "sn1-public" {
   count             = var.az_count
-  cidr_block              = cidrsubnet(aws_vpc.vpc.cidr_block, 8, var.az_count + count.index)
+  cidr_block              = "10.0.0.0/24"
   vpc_id                  = aws_vpc.vpc.id
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
@@ -27,7 +27,7 @@ resource "aws_subnet" "sn1-public" {
 
 resource "aws_subnet" "sn2-private" {
   count             = var.az_count
-  cidr_block              = cidrsubnet(aws_vpc.vpc.cidr_block, 8, var.az_count + count.index)
+  cidr_block              = "10.0.0.128/24"
   vpc_id                  = aws_vpc.vpc.id
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
